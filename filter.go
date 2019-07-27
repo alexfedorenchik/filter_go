@@ -180,13 +180,13 @@ func process(in *bufio.Reader, params cli.Params, name string) {
 	for scan.Scan() {
 		token := scan.Bytes()
 		for _, search := range params.SearchStrings {
-			if bytes.Contains(token, search) {
+			if bytes.Contains(token, search) == !params.Inverse {
 				writeChunk(outWriter, params.Delimiter, name)
 				writeChunk(outWriter, token, name)
 			}
 		}
 		for _, search := range params.RegexpStrings {
-			if search.Match(token) {
+			if search.Match(token) == !params.Inverse {
 				writeChunk(outWriter, params.Delimiter, name)
 				writeChunk(outWriter, token, name)
 			}

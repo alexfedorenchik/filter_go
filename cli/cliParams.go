@@ -15,6 +15,7 @@ type Params struct {
 	RegexpStrings []*regexp.Regexp
 	Force         bool
 	Line          bool
+	Inverse       bool
 	X             bool
 	Mask          string
 	InputDir      string
@@ -44,6 +45,9 @@ func (it *Params) Load() {
 	var dry bool
 	flag.BoolVar(&dry, "x", false, "Skip write results")
 
+	var inverse bool
+	flag.BoolVar(&inverse, "i", false, "Inverse search")
+
 	var inputDir string
 	flag.StringVar(&inputDir, "src", dir, "Input directory")
 
@@ -70,6 +74,7 @@ func (it *Params) Load() {
 	}
 	it.Force = force
 	it.Line = line
+	it.Inverse = inverse
 	it.Mask = fileMask
 	it.X = dry
 	it.InputDir = inputDir
@@ -94,6 +99,7 @@ func (it *Params) Print() {
 	log.Printf("strings: %v", it.searchStrings.String())
 	log.Printf("regexps: %v", it.regexpStrings.String())
 	log.Printf("force: %v", it.Force)
+	log.Printf("inverse: %v", it.Inverse)
 	log.Printf("dry-run: %v", it.X)
 	log.Printf("line: %v", it.Line)
 	log.Printf("mask: %v", it.Mask)
