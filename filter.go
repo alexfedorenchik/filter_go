@@ -4,8 +4,8 @@ import (
 	"archive/zip"
 	"bufio"
 	"bytes"
+	"filter/cli"
 	"log"
-	"logfilter/cmd/filter/cli"
 	"os"
 	"path/filepath"
 	"strings"
@@ -60,9 +60,9 @@ func prepareDst(params cli.Params) {
 	path := filepath.Join(params.InputDir, params.OutputDir)
 	if _, err := os.Stat(path); !os.IsNotExist(err) {
 		if params.Force {
-			 if err :=  os.RemoveAll(path); err!= nil {
-			 	log.Fatalf("can't clear directory %v due to %v", path, err)
-			 }
+			if err := os.RemoveAll(path); err != nil {
+				log.Fatalf("can't clear directory %v due to %v", path, err)
+			}
 		} else {
 			if params.X {
 				log.Printf("WARN: directory %v already exist, but -f option is missed", path)
@@ -98,7 +98,7 @@ func introspectZip(name string, params cli.Params, gwg *sync.WaitGroup) {
 	}()
 
 	zwg := new(sync.WaitGroup)
-	
+
 	for _, file := range zf.File {
 		zwg.Add(1)
 		go processArchived(file, params, zwg)

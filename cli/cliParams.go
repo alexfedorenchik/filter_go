@@ -13,13 +13,13 @@ type Params struct {
 	searchStrings ArrayFlags
 	regexpStrings ArrayFlags
 	RegexpStrings []*regexp.Regexp
-	Force bool
-	Line bool
-	X bool
-	Mask string
-	InputDir string
-	OutputDir string
-	Delimiter []byte
+	Force         bool
+	Line          bool
+	X             bool
+	Mask          string
+	InputDir      string
+	OutputDir     string
+	Delimiter     []byte
 }
 
 func (it *Params) Load() {
@@ -30,10 +30,10 @@ func (it *Params) Load() {
 	log.Printf("working dir: %v", dir)
 
 	var searchString ArrayFlags
-	flag.Var(&searchString,"s", "String to search")
+	flag.Var(&searchString, "s", "String to search")
 
 	var regexString ArrayFlags
-	flag.Var(&regexString,"r", "Regexp to search")
+	flag.Var(&regexString, "r", "Regexp to search")
 
 	var force bool
 	flag.BoolVar(&force, "f", false, "Force directory recreation")
@@ -73,7 +73,11 @@ func (it *Params) Load() {
 	it.Mask = fileMask
 	it.X = dry
 	it.InputDir = inputDir
-	if len(outputDir) > 0 { it.OutputDir = outputDir } else { it.OutputDir = it.resultDir() }
+	if len(outputDir) > 0 {
+		it.OutputDir = outputDir
+	} else {
+		it.OutputDir = it.resultDir()
+	}
 	it.Delimiter = []byte(delimiter)
 }
 
