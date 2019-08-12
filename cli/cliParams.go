@@ -21,6 +21,7 @@ type Params struct {
 	InputDir      string
 	OutputDir     string
 	Delimiter     []byte
+	BufferSize    int
 }
 
 func (it *Params) Load() {
@@ -60,6 +61,9 @@ func (it *Params) Load() {
 	var delimiter string
 	flag.StringVar(&delimiter, "d", "####", "Log records delimiter")
 
+	var bufferSize int
+	flag.IntVar(&bufferSize, "b", 5242880, "Max log line (buffer) size (5M default)")
+
 	flag.Parse()
 
 	it.searchStrings = searchString
@@ -84,6 +88,7 @@ func (it *Params) Load() {
 		it.OutputDir = it.resultDir()
 	}
 	it.Delimiter = []byte(delimiter)
+	it.BufferSize = bufferSize
 }
 
 func (it *Params) resultDir() string {
@@ -106,5 +111,6 @@ func (it *Params) Print() {
 	log.Printf("input dir: %v", it.InputDir)
 	log.Printf("output dir: %v", it.OutputDir)
 	log.Printf("delimiter: %v", string(it.Delimiter))
+	log.Printf("buffer size: %v", it.BufferSize)
 	log.Printf("========================================")
 }

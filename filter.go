@@ -173,7 +173,9 @@ func process(in *bufio.Reader, params cli.Params, name string) {
 	outWriter := bufio.NewWriter(outFile)
 
 	//prepare scanner
+	buffer := make([]byte, params.BufferSize)
 	scan := bufio.NewScanner(in)
+	scan.Buffer(buffer, params.BufferSize)
 	scan.Split(getSplitFunc(params))
 
 	//process file
