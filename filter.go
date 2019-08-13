@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"bytes"
 	"filter/cli"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -54,6 +55,9 @@ func Run(params cli.Params) {
 
 	//wait for goroutines
 	gwg.Wait()
+
+	//delete empty files
+	cleanup(params)
 }
 
 func prepareDst(params cli.Params) {
@@ -233,5 +237,23 @@ func splitAt(substring []byte) func(data []byte, atEOF bool) (advance int, token
 
 		// Request more data.
 		return 0, nil, nil
+	}
+}
+
+func cleanup(params cli.Params) {
+	path := filepath.Join(params.InputDir, params.OutputDir)
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		log.Printf("can't list directory %v due to %v", path, err)
+		return
+	}
+	for _, v := range files {
+		if v.Size() == 0 {
+			fn := filepath.Join(path, v.Name())
+			err := os.Remove(fn)
+			if err != nil {
+				log.Printf("can't delete empty file %v due to %v", fn, err)
+			}
+		}
 	}
 }
